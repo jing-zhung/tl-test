@@ -12,8 +12,6 @@ Node::~Node()
     // deleting the left and right pointers
     delete left;
     delete right;
-    // printing node data
-    std::cout << "Deleted node with data " << this->data << std::endl;
 }
 
 BinaryTreeCalculator::BinaryTreeCalculator()
@@ -24,7 +22,6 @@ BinaryTreeCalculator::BinaryTreeCalculator()
 
 void BinaryTreeCalculator::setInput(std::string operation)
 {
-    std::cout << "Received: " << operation << std::endl;
     stringToTree(operation);
     //calcAnswer();
 }
@@ -63,6 +60,7 @@ Node* BinaryTreeCalculator::insertNode(Node* root, std::string operation)
         node_data = operation;
     }
 
+    // Clear redundant brackets
     if(substr1.front() == '(' && substr1.back() == ')')
     {
         substr1 = substr1.substr(1, substr1.size() - 2);
@@ -71,7 +69,6 @@ Node* BinaryTreeCalculator::insertNode(Node* root, std::string operation)
     {
         substr2 = substr2.substr(1, substr2.size() - 2);
     }
-
 
     if (root == nullptr)
     {
@@ -83,10 +80,6 @@ Node* BinaryTreeCalculator::insertNode(Node* root, std::string operation)
         root->left = insertNode(root->left, substr1);
         root->right = insertNode(root->right, substr2);
     }
-
-    std::cout << "1. " << substr1 << std::endl;
-    std::cout << "2. " << node_data << std::endl; 
-    std::cout << "3. " << substr2 << std::endl;
     return root;
 }
 
@@ -97,13 +90,34 @@ void BinaryTreeCalculator::stringToTree(std::string operation)
 
     std::cout << "Populate tree..." << std::endl;
     root_ = insertNode(root_, operation);
+    //std::cout << root_->data << "|" << root_->left->data << "|" << root_->right->data << std::endl;
+}
 
-    std::cout << "Display tree..." << std::endl;
+void BinaryTreeCalculator::printTree(const std::string& prefix, const Node* node, bool isLeft)
+{
+    if( node != nullptr )
+    {
+        // Formatting
+        std::cout << prefix;
+        std::cout << (isLeft ? "|--" : "\\--" );
 
-    std::cout << root_->data << "|" << root_->left->data << "|" << root_->right->data << std::endl;
+        // print the value of the node
+        std::cout << " " << node->data << std::endl;
+
+        // enter the next tree level - left and right branch
+        printTree( prefix + (isLeft ? "|   " : "    "), node->left, true);
+        printTree( prefix + (isLeft ? "|   " : "    "), node->right, false);
+    }
+}
+
+void BinaryTreeCalculator::displayTree()
+{    
+    std::cout << "Display tree:" << std::endl;
+    printTree("", root_, false);
 }
 
 void BinaryTreeCalculator::reset()
 {
+    std::cout << "Delete tree..." << std::endl;
     delete root_;
 }

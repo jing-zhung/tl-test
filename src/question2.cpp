@@ -7,6 +7,7 @@ int main()
     std::cout << "Type math operation: ";
     std::getline(std::cin, operation);
     calc.setInput(operation);
+    calc.displayTree();
     calc.reset();
     return 0;
 }

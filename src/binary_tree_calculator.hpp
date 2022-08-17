@@ -21,6 +21,7 @@ class BinaryTreeCalculator
 
         void stringToTree(std::string operation);
         Node* insertNode(Node* root, std::string operation);
+        void printTree(const std::string& prefix, const Node* node, bool isLeft);
         void calcAnswer();
     public:
         BinaryTreeCalculator();
