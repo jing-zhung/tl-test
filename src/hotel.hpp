@@ -1,3 +1,6 @@
+#ifndef HOTEL_HPP
+#define HOTEL_HPP
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -23,6 +26,7 @@ class Hotel
         Graph* state_graph_;
 
         int getIndex(std::string state);
+        bool setState(std::string room_name, int destination_index);
     public:
         Hotel(std::vector<std::string> room_states);
         ~Hotel();
@@ -35,7 +39,10 @@ class Hotel
         bool checkOut(std::string room_name);
         bool setAvailable(std::string room_name);
         bool setRepair(std::string room_name);
+        bool setVacant(std::string room_name);
         std::vector<std::string> listAvailableRooms();
 
         void deleteRooms();
 };
+
+#endif

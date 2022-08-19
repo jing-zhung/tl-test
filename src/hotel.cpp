@@ -84,19 +84,48 @@ std::string Hotel::assignRoom()
     return "";
 }
 
+bool Hotel::setState(std::string room_name, int destination_index)
+{
+    for(auto room : rooms_)
+    {
+        if(room->name_ == room_name)
+        {
+            if(state_graph_->checkEdge(getIndex(room->state_), destination_index))
+            {
+                room->state_ = room_states_[destination_index];
+                return true;
+            }
+            else
+            {
+                std::cout << "State of room " << room_name << ": " << room->state_ << std::endl;
+                std::cout << "No edge from " << room->state_ << " to " << room_states_[destination_index] << " in state graph" << std::endl;
+                std::cout << "Operation invalid" << std::endl;
+                return false;
+            }
+        }
+    }
+    std::cout << "No room named " << room_name << std::endl;
+    return false;
+}
+
 bool Hotel::checkOut(std::string room_name)
 {
-    return true;
+    return setState(room_name, 2);
 }
 
 bool Hotel::setAvailable(std::string room_name)
 {
-    return true;
+    return setState(room_name, 0);
 }
 
 bool Hotel::setRepair(std::string room_name)
 {
-    return true;
+    return setState(room_name, 3);
+}
+
+bool Hotel::setVacant(std::string room_name)
+{
+    return setState(room_name, 2);
 }
 
 std::vector<std::string> Hotel::listAvailableRooms()
@@ -111,6 +140,8 @@ std::vector<std::string> Hotel::listAvailableRooms()
     }
     return available_rooms;
 }
+
+
 
 void Hotel::deleteRooms()
 {
