@@ -16,7 +16,15 @@ int main()
     hotel.addStateChange(ROOM_STATES[3], ROOM_STATES[2]);
     hotel.addStateChange(ROOM_STATES[2], ROOM_STATES[0]);
 
+    std::cout << "Print room state graph:" << std::endl;
     hotel.printStateGraph();
+
+    std::cout << "Available rooms: ";
+    for(auto room : hotel.listAvailableRooms())
+    {
+        std::cout << room << " ";
+    }
+    std::cout << std::endl;
 
     std::cout << "End" << std::endl;
     return 0;

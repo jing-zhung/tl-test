@@ -62,6 +62,39 @@ void Hotel::printStateGraph()
     state_graph_->printGraph();
 }
 
+std::string Hotel::assignRoom()
+{
+    return "";
+}
+
+bool Hotel::checkOut(std::string room_name)
+{
+    return true;
+}
+
+bool Hotel::setAvailable(std::string room_name)
+{
+    return true;
+}
+
+bool Hotel::setRepair(std::string room_name)
+{
+    return true;
+}
+
+std::vector<std::string> Hotel::listAvailableRooms()
+{
+    std::vector<std::string> available_rooms;
+    for(auto room : rooms_)
+    {
+        if(room->state_ == room_states_[0])
+        {
+            available_rooms.push_back(room->name_);
+        }
+    }
+    return available_rooms;
+}
+
 void Hotel::deleteRooms()
 {
     for(auto room : rooms_)

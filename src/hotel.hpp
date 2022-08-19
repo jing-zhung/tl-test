@@ -31,6 +31,11 @@ class Hotel
         void addStateChange(std::string source_state, std::string destination_state);
 
         void printStateGraph();
+        std::string assignRoom();
+        bool checkOut(std::string room_name);
+        bool setAvailable(std::string room_name);
+        bool setRepair(std::string room_name);
+        std::vector<std::string> listAvailableRooms();
 
         void deleteRooms();
 };
