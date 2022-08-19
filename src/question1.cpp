@@ -26,6 +26,15 @@ int main()
     }
     std::cout << std::endl;
 
+    std::cout << "Assigned room: " << hotel.assignRoom() << std::endl;
+
+    std::cout << "Available rooms: ";
+    for(auto room : hotel.listAvailableRooms())
+    {
+        std::cout << room << " ";
+    }
+    std::cout << std::endl;
+
     std::cout << "End" << std::endl;
     return 0;
 }

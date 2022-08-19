@@ -64,6 +64,23 @@ void Hotel::printStateGraph()
 
 std::string Hotel::assignRoom()
 {
+    for(auto room : rooms_)
+    {
+        if(room->state_ == room_states_[0])
+        {
+            if(state_graph_->checkEdge(0, 1))
+            {
+                room->state_ = room_states_[1];
+                return room->name_;
+            }
+            else
+            {
+                std::cout << "No edge from " << room_states_[0] << " to " << room_states_[1] << " in state graph" << std::endl;
+                return "";
+            }
+        }
+    }
+    std::cout << "No available rooms" << std::endl;
     return "";
 }
 
