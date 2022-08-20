@@ -44,19 +44,21 @@ enable_testing()
 
 add_executable(
     hotel_test
-    src/question1/test/hotel_test.cpp
+    src/question1/hotel_test.cpp
 )
 target_link_libraries(
     hotel_test
+    hotel
     GTest::gtest_main
 )
 
 add_executable(
     binary_tree_calculator_test
-    src/question2/test/binary_tree_calculator_test.cpp
+    src/question2/binary_tree_calculator_test.cpp
 )
 target_link_libraries(
     binary_tree_calculator_test
+    binary_tree_calculator
     GTest::gtest_main
 )
 
