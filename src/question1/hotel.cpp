@@ -1,32 +1,16 @@
 #include "hotel.hpp"
 
-int Hotel::getIndex(std::string state)
-{
-    auto it = std::find(room_states_.begin(), room_states_.end(), state);
-
-    // If element was found
-    if (it != room_states_.end()) 
-    {
-        // calculating the index
-        int index = it - room_states_.begin();
-        return index;
-    }
-    else 
-    {
-        // If the element is not
-        // present in the vector
-        return -1;
-    }
-}
-
 Hotel::Hotel()
 {
     this->room_states_ = ROOM_STATES;
     state_graph_ = new Graph();
+
+    // Add room states as vertices in a graph
     for(auto room_state : ROOM_STATES)
     {
         state_graph_->addVertex(new Vertex(room_state));
     }
+
     this->addStateChange(ROOM_STATES[0], ROOM_STATES[1]);
     this->addStateChange(ROOM_STATES[1], ROOM_STATES[2]);
     this->addStateChange(ROOM_STATES[2], ROOM_STATES[3]);
@@ -55,12 +39,16 @@ void Hotel::addRoom(Room* room)
     rooms_.push_back(room);
 }
 
+// Add room state change as an edge in a graph
 void Hotel::addStateChange(std::string source_state, std::string destination_state)
 {
     int source_index = getIndex(source_state);
     int destination_index = getIndex(destination_state);
 
-    state_graph_->addEdge(source_index, destination_index);
+    if(source_index != -1 && destination_index != -1)
+    {
+        state_graph_->addEdge(source_index, destination_index);
+    }
 };
 
 void Hotel::printStateGraph()
@@ -92,12 +80,20 @@ std::string Hotel::assignRoom()
 
 bool Hotel::setState(std::string room_name, int source_index, int destination_index)
 {
+    // Check if room states exists
+    if(source_index >= room_states_.size() || destination_index >= room_states_.size())
+    {
+        std::cout << "Invalid source index or destination index" << std::endl;
+        return false;
+    }
+
     for(auto room : rooms_)
     {
         if(room->name_ == room_name)
         {
             if(room->state_ == room_states_[source_index])
             {
+                // Check if room state change exists
                 if(state_graph_->checkEdge(getIndex(room->state_), destination_index))
                 {
                     room->state_ = room_states_[destination_index];
@@ -163,4 +159,22 @@ void Hotel::deleteRooms()
         delete room;
     }
     rooms_.clear();
+}
+
+int Hotel::getIndex(std::string state)
+{
+    auto it = std::find(room_states_.begin(), room_states_.end(), state);
+
+    // If element is found
+    if (it != room_states_.end())
+    {
+        // Calculating the index
+        int index = it - room_states_.begin();
+        return index;
+    }
+    else
+    {
+        // If the element is not found
+        return -1;
+    }
 }
