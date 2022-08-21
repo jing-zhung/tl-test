@@ -1,5 +1,9 @@
 # tl-test
 
+## Prerequisite
+
+* Install CMake
+
 ## Build and run
 
 * To build, in 'tl-test' directory run:
