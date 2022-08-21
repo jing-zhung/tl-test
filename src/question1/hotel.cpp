@@ -19,20 +19,26 @@ int Hotel::getIndex(std::string state)
     }
 }
 
-Hotel::Hotel(std::vector<std::string> room_states)
+Hotel::Hotel()
 {
-    this->room_states_ = room_states;
+    this->room_states_ = ROOM_STATES;
     state_graph_ = new Graph();
-    for(auto room_state : room_states)
+    for(auto room_state : ROOM_STATES)
     {
         state_graph_->addVertex(new Vertex(room_state));
     }
+    this->addStateChange(ROOM_STATES[0], ROOM_STATES[1]);
+    this->addStateChange(ROOM_STATES[1], ROOM_STATES[2]);
+    this->addStateChange(ROOM_STATES[2], ROOM_STATES[3]);
+    this->addStateChange(ROOM_STATES[3], ROOM_STATES[2]);
+    this->addStateChange(ROOM_STATES[2], ROOM_STATES[0]);
 }
 
 Hotel::~Hotel()
 {
     deleteRooms();
-    state_graph_->deleteGraph();
+    delete state_graph_;
+    state_graph_ = nullptr;
 }
 
 void Hotel::addRooms(std::vector<std::pair<std::string, int>> rooms)
@@ -84,21 +90,30 @@ std::string Hotel::assignRoom()
     return "";
 }
 
-bool Hotel::setState(std::string room_name, int destination_index)
+bool Hotel::setState(std::string room_name, int source_index, int destination_index)
 {
     for(auto room : rooms_)
     {
         if(room->name_ == room_name)
         {
-            if(state_graph_->checkEdge(getIndex(room->state_), destination_index))
+            if(room->state_ == room_states_[source_index])
             {
-                room->state_ = room_states_[destination_index];
-                return true;
+                if(state_graph_->checkEdge(getIndex(room->state_), destination_index))
+                {
+                    room->state_ = room_states_[destination_index];
+                    return true;
+                }
+                else
+                {
+                    std::cout << "State of room " << room_name << ": " << room->state_ << std::endl;
+                    std::cout << "No edge from " << room->state_ << " to " << room_states_[destination_index] << " in state graph" << std::endl;
+                    std::cout << "Operation invalid" << std::endl;
+                    return false;
+                }
             }
             else
             {
-                std::cout << "State of room " << room_name << ": " << room->state_ << std::endl;
-                std::cout << "No edge from " << room->state_ << " to " << room_states_[destination_index] << " in state graph" << std::endl;
+                std::cout << "State of room " << room_name << " is " << room->state_ << ", not " << room_states_[source_index] << std::endl;
                 std::cout << "Operation invalid" << std::endl;
                 return false;
             }
@@ -110,22 +125,22 @@ bool Hotel::setState(std::string room_name, int destination_index)
 
 bool Hotel::checkOut(std::string room_name)
 {
-    return setState(room_name, 2);
+    return setState(room_name, 1, 2);
 }
 
 bool Hotel::setAvailable(std::string room_name)
 {
-    return setState(room_name, 0);
+    return setState(room_name, 2, 0);
 }
 
 bool Hotel::setRepair(std::string room_name)
 {
-    return setState(room_name, 3);
+    return setState(room_name, 2, 3);
 }
 
 bool Hotel::setVacant(std::string room_name)
 {
-    return setState(room_name, 2);
+    return setState(room_name, 3, 2);
 }
 
 std::vector<std::string> Hotel::listAvailableRooms()
@@ -141,12 +156,11 @@ std::vector<std::string> Hotel::listAvailableRooms()
     return available_rooms;
 }
 
-
-
 void Hotel::deleteRooms()
 {
     for(auto room : rooms_)
     {
         delete room;
     }
+    rooms_.clear();
 }

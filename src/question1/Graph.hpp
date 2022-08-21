@@ -20,6 +20,10 @@ class Graph
     private:
         std::vector<std::list<Vertex*>*> adj_list;
     public:
+        ~Graph()
+        {
+            deleteGraph();
+        }
         void addVertex(Vertex* vertex)
         {
             std::list<Vertex*> *current_list = new std::list<Vertex*>;
@@ -38,7 +42,7 @@ class Graph
             Vertex* destination_vertex = adj_list[destination]->front();
             for(auto vertex : *current_list)
             {
-                if(vertex == destination_vertex)
+                if(vertex == destination_vertex && vertex != current_list->front())
                 {
                     return true;
                 }
@@ -61,6 +65,7 @@ class Graph
             for(auto list : adj_list)
             {
                 delete list;
+                adj_list.clear();
             }
         }
 };

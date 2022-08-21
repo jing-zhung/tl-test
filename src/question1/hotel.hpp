@@ -6,6 +6,8 @@
 #include <algorithm>
 #include "Graph.hpp"
 
+const std::vector<std::string> ROOM_STATES = {"Available", "Occupied", "Vacant", "Repair"};
+
 class Room
 {
     public:
@@ -26,9 +28,9 @@ class Hotel
         Graph* state_graph_;
 
         int getIndex(std::string state);
-        bool setState(std::string room_name, int destination_index);
+        bool setState(std::string room_name, int source_index, int destination_index);
     public:
-        Hotel(std::vector<std::string> room_states);
+        Hotel();
         ~Hotel();
         void addRooms(std::vector<std::pair<std::string, int>> rooms);
         void addRoom(Room* room);
