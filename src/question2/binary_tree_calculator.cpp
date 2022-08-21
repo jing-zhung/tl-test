@@ -25,24 +25,44 @@ void BinaryTreeCalculator::setInput(std::string operation)
 
 bool BinaryTreeCalculator::checkValidity(std::string operation)
 {
+    int bracket_counter = 0;
+
     for(char& c : operation)
     {
+        // Check if string only contains numbers and math operators
         if(!std::isdigit(c) && c != '+' && c != '-' && c != '*' && c != '/' && c != '(' && c != ')')
         {
             return false;
         }
+        else if(c == '(')
+        {
+            bracket_counter++;
+        }
+        else if(c == ')')
+        {
+            bracket_counter--;
+        }
     }
-    return true;
+
+    // Check if brackets usage is valid
+    if(bracket_counter == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 Node* BinaryTreeCalculator::insertNode(Node* root, std::string operation)
 {
-    // String processing
     bool not_number = false;
     std::string substr1, substr2, node_data;
     int bracket_counter = 0;
     bool front_negative_number = false;
 
+    // Deconstruct string into 2 math operations separated by a math operator
     for(char& c : operation) 
     {
         if(c == '(')
@@ -70,6 +90,7 @@ Node* BinaryTreeCalculator::insertNode(Node* root, std::string operation)
         }
     }
 
+    // Set data of node
     if(!not_number)
     {
         if(front_negative_number)
@@ -94,11 +115,13 @@ Node* BinaryTreeCalculator::insertNode(Node* root, std::string operation)
         substr2 = substr2.substr(1, substr2.size() - 2);
     }
 
+    // Create new node
     if (root == nullptr)
     {
         root = new Node(node_data);
     }
     
+    // Insert left and right nodes
     if(not_number)
     {
         root->left = insertNode(root->left, substr1);
@@ -131,6 +154,7 @@ void BinaryTreeCalculator::getResult(double &result, char op, double number)
             result *= number;
             break;
         case '/':
+            // Check for undefined answer
             if(number == 0)
             {
                 is_valid_ = false;
@@ -151,19 +175,23 @@ std::string BinaryTreeCalculator::calcAnswer(Node* root)
     std::string string;
     double answer, number;
     char op;
+    // If it has left and right nodes, it's a math operator
     if(root->left != nullptr && root->right != nullptr)
     {
         string = calcAnswer(root->left) + root->data + calcAnswer(root->right);
     }
+    // If it has only right node, it's a negative number of right node
     else if(root->right != nullptr)
     {
         string = "0" + root->data + calcAnswer(root->right);
     }
+    // If no left or right nodes, it's a leaf node containing a number
     else if(root->left == nullptr && root->right == nullptr)
     {
         return root->data;
     }
 
+    // Get answer
     std::stringstream math(string);
     math >> answer;
     math >> op >> number;
@@ -179,10 +207,10 @@ void BinaryTreeCalculator::printTree(const std::string& prefix, const Node* node
         std::cout << prefix;
         std::cout << (isLeft ? "|--" : "\\--" );
 
-        // print the value of the node
+        // Print the value of the node
         std::cout << "(" << node->data  << ")" << std::endl;
 
-        // enter the next tree level - left and right branch
+        // Enter the next tree level - left and right branch
         printTree( prefix + (isLeft ? "|   " : "    "), node->left, true);
         printTree( prefix + (isLeft ? "|   " : "    "), node->right, false);
     }
@@ -196,6 +224,7 @@ void BinaryTreeCalculator::displayTree()
 
 double BinaryTreeCalculator::getAnswer()
 {
+    // Convert answer from string to double
     return std::stod(answer_);
 }
 
