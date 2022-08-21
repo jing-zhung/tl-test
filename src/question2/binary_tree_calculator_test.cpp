@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "binary_tree_calculator.hpp"
 
-TEST(BinaryTreeCalculatorTest, BasicAssertions)
+TEST(BinaryTreeCalculatorTest, MathOperations)
 {
     BinaryTreeCalculator calc;
     calc.setInput("(1 + 1) * 2");
