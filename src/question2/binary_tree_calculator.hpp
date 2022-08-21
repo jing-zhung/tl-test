@@ -11,9 +11,27 @@ class Node
         Node* left;
         Node* right;
         // constructor
-        Node(std::string data);
+        Node(std::string data)
+        {
+            this->data = data;
+            this->left = nullptr;
+            this->right = nullptr;
+        };
         // destructor
-        ~Node();
+        ~Node()
+        {
+            // delete the left and right pointers
+            if(left != nullptr)
+            {
+                delete left;
+                left = nullptr;
+            }
+            if(right != nullptr)
+            {
+                delete right;
+                right = nullptr;
+            }
+        };
 };
 
 class BinaryTreeCalculator

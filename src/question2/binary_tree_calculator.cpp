@@ -1,19 +1,5 @@
 #include "binary_tree_calculator.hpp"
 
-Node::Node(std::string data)
-{
-    this->data = data;
-    this->left = nullptr;
-    this->right = nullptr;
-}
-
-Node::~Node() 
-{
-    // deleting the left and right pointers
-    delete left;
-    delete right;
-}
-
 BinaryTreeCalculator::BinaryTreeCalculator()
 {
     std::cout << "Binary Tree Calculator initialized." << std::endl;
@@ -222,5 +208,6 @@ void BinaryTreeCalculator::reset()
 {
     std::cout << "Delete tree..." << std::endl;
     delete root_;
+    root_ = nullptr;
     is_valid_ = true;
 }
