@@ -3,12 +3,11 @@
 int main()
 {
     // Initialize calculator
-    std::string operation;
     BinaryTreeCalculator calc;
     std::cout << "Math operation must only contain numbers or the following symbols: ( ) + - * /" << std::endl;
 
     // Execution loop
-    std::string keyboard_input;
+    std::string operation;
     while(true)
     {
         std::cout << "Type math operation: ";
